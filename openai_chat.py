@@ -1,13 +1,14 @@
-from openai import OpenAI
+import openai
 import tiktoken
 import os
 from rich import print
 
-def num_tokens_from_messages(messages, model='gpt-4o'):
+
+def num_tokens_from_messages(messages, model='cl100k_base'):
   """Returns the number of tokens used by a list of messages.
   Copied with minor changes from: https://platform.openai.com/docs/guides/chat/managing-tokens """
   try:
-      encoding = tiktoken.encoding_for_model(model)
+      encoding = tiktoken.get_encoding(model)
       num_tokens = 0
       for message in messages:
           num_tokens += 4  # every message follows <im_start>{role/name}\n{content}<im_end>\n
@@ -23,13 +24,9 @@ def num_tokens_from_messages(messages, model='gpt-4o'):
       
 
 class OpenAiManager:
-    
+    openai.api_key = os.getenv('OPENAI_API_KEY')
     def __init__(self):
         self.chat_history = [] # Stores the entire conversation
-        try:
-            self.client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
-        except TypeError:
-            exit("Ooops! You forgot to set OPENAI_API_KEY in your environment!")
 
     # Asks a question with no chat history
     def chat(self, prompt=""):
@@ -44,10 +41,11 @@ class OpenAiManager:
             return
 
         print("[yellow]\nAsking ChatGPT a question...")
-        completion = self.client.chat.completions.create(
-          model="gpt-4o",
+        completion = openai.ChatCompletion.create(
+          model="gpt-4o-mini",
           messages=chat_question
         )
+        print(completion)
 
         # Process the answer
         openai_answer = completion.choices[0].message.content
@@ -70,8 +68,8 @@ class OpenAiManager:
             print(f"Popped a message! New token length is: {num_tokens_from_messages(self.chat_history)}")
 
         print("[yellow]\nAsking ChatGPT a question...")
-        completion = self.client.chat.completions.create(
-          model="gpt-4o",
+        completion = openai.ChatCompletion.create(
+          model="gpt-4o-mini",
           messages=self.chat_history
         )
 

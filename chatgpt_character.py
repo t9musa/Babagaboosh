@@ -7,7 +7,7 @@ from eleven_labs import ElevenLabsManager
 from obs_websockets import OBSWebsocketsManager
 from audio_player import AudioManager
 
-ELEVENLABS_VOICE = "Pointboat" # Replace this with the name of whatever voice you have created on Elevenlabs
+ELEVENLABS_VOICE = "Henry" # Replace this with the name of whatever voice you have created on Elevenlabs
 
 BACKUP_FILE = "ChatHistoryBackup.txt"
 
@@ -68,13 +68,13 @@ while True:
     elevenlabs_output = elevenlabs_manager.text_to_audio(openai_result, ELEVENLABS_VOICE, False)
 
     # Enable the picture of Pajama Sam in OBS
-    obswebsockets_manager.set_source_visibility("*** Mid Monitor", "Pajama Sam", True)
+     #obswebsockets_manager.set_source_visibility("*** Mid Monitor", "Pajama Sam", True)
 
     # Play the mp3 file
     audio_manager.play_audio(elevenlabs_output, True, True, True)
 
     # Disable Pajama Sam pic in OBS
-    obswebsockets_manager.set_source_visibility("*** Mid Monitor", "Pajama Sam", False)
+    #obswebsockets_manager.set_source_visibility("*** Mid Monitor", "Pajama Sam", False)
 
     print("[green]\n!!!!!!!\nFINISHED PROCESSING DIALOGUE.\nREADY FOR NEXT INPUT\n!!!!!!!\n")
     
